@@ -63,11 +63,12 @@ app.post("/urls", (req, res) => {
 });
 
 //delete url from database, redirct user to main page
-app.post("/urls/:id/delete", (req, res) => {
+app.post("/urls/:id/delete/", (req, res) => {
+  console.log(req.params);
   const shortURL = req.params.id;
   delete urlDatabase[shortURL];
   res.redirect('/urls');
-  console.log(shortURL);
+  //console.log(shortURL);
 });
 
 //edit url
