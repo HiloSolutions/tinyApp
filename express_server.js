@@ -28,6 +28,15 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+//logs the request body and gives a dummy form response.
+app.post("/urls", (req, res) => {
+  console.log(req.body); // Log the POST request body to the console
+  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+});
+
+function generateRandomString() {
+
+};
 //route handler
 app.get("/", (req, res) => {
   res.send("Hello");
