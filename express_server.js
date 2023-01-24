@@ -71,27 +71,22 @@ app.post("/urls/:id/delete/", (req, res) => {
   //console.log(shortURL);
 });
 
-//edit url
-app.post("/urls/edit/:id", (req, res) => {
-  //const shortURL = req.params.id; //update database
+//edit url, choose url to update and takes user to upate form
+app.post("/urls/:id/edit/", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
-  console.log(req.body); // Log the POST request body to the console
-  res.render(`urls_edit`,templateVars);
+  res.render(`urls_show`,templateVars);
 });
+
+//receive edit submission
 
 //route handler to home. can i delete?
 app.get("/", (req, res) => {
-  res.send("Hello");
+  res.redirect("/urls");
 });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
-
-// //route handler
-// app.get("/hello", (req, res) => {
-//   res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
 
 
 //instructions for what to do when server starts up
