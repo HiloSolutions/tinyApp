@@ -3,22 +3,29 @@ const app = express(); //func to call server object
 const PORT = 8080;
 
 app.set("view engine", "ejs");
+//middleware will parse the body of POST request from a buffer to a string and make it readable
+app.use(express.urlencoded({ extended: true }));
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
-//route handler to pass the URL data to our template.
-app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
+//route handler to get and render the urls_new template
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
 });
 
 //route handler to pass the single URL data to whow.ejs
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
+});
+
+//route handler to pass the URL data to our template.
+app.get("/urls", (req, res) => {
+  const templateVars = { urls: urlDatabase };
+  res.render("urls_index", templateVars);
 });
 
 //route handler
