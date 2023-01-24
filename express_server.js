@@ -78,8 +78,14 @@ app.post("/urls/:id/edit/", (req, res) => {
 });
 
 //receive edit submission
+app.post("/urls/:id", (req, res) => {
+  const shortURL = req.params.id;
+  console.log(urlDatabase[shortURL]);
+  urlDatabase[shortURL] = req.body.longURL;
+  res.redirect('/urls');
+});
 
-//route handler to home. can i delete?
+//route handler to home.
 app.get("/", (req, res) => {
   res.redirect("/urls");
 });
