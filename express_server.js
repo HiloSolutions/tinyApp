@@ -44,6 +44,11 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/:${shortURL}`);
 });
 
+//delete request
+app.post("/urls/:id/delete", (req, res) => {
+  //delete urlDatabase
+})
+
 //route handler
 app.get("/", (req, res) => {
   res.send("Hello");
