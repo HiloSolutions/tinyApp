@@ -22,21 +22,26 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.get("/u/:id", (req, res) => {
+  const longURL = urlDatabase[req.params.id];
+  res.redirect(longURL);
+});
+
 //route handler to pass the URL data to our template.
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
+const generateRandomString = () => {
+  return Math.random().toString(36).slice(-6);
+};
 //logs the request body and gives a dummy form response.
 app.post("/urls", (req, res) => {
   console.log(req.body); // Log the POST request body to the console
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+  res.redirect(`/urls/:${generateRandomString()}`);
 });
 
-function generateRandomString() {
-
-};
 //route handler
 app.get("/", (req, res) => {
   res.send("Hello");
