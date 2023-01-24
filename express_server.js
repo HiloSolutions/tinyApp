@@ -38,8 +38,10 @@ const generateRandomString = () => {
 };
 //logs the request body and gives a dummy form response.
 app.post("/urls", (req, res) => {
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL; //update database
   console.log(req.body); // Log the POST request body to the console
-  res.redirect(`/urls/:${generateRandomString()}`);
+  res.redirect(`/urls/:${shortURL}`);
 });
 
 //route handler
