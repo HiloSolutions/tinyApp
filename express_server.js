@@ -1,26 +1,22 @@
-//
-//CONFIGURE APP
-//
 const express = require('express');
 const app = express(); //func to call server object
 const PORT = 8080;
+
+
+const cookieParser = require("cookie-parser");
 app.set("view engine", "ejs");
 
-
-//
-//MIDDLEWARE
-//
-app.use(express.urlencoded({ extended: true })); //parse the body of POST request from a buffer to a string and make it readable
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 
 //
-//DATABASE
+//VARIABLES
 //
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-
 
 //
 //ROUTES
@@ -28,12 +24,19 @@ const urlDatabase = {
 
 //get and render the urls_new template
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const templateVars = {
+    username: req.cookies["username"]
+  };
+  res.render("urls_new", templateVars);
 });
 
 //pass the single URL data to display a single URL and its shortened form
 app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
+  const templateVars = {
+    id: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    username: req.cookies["username"]
+  };
   res.render("urls_show", templateVars);
 });
 
@@ -45,7 +48,10 @@ app.get("/u/:id", (req, res) => {
 
 //pass the URL data (urlDatabase) to urls_index template.
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = {
+    urls: urlDatabase,
+    username: req.cookies["username"]
+  };
   res.render("urls_index", templateVars);
 });
 
@@ -73,7 +79,11 @@ app.post("/urls/:id/delete/", (req, res) => {
 
 //edit url, choose url to update and takes user to upate form
 app.post("/urls/:id/edit/", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
+  const templateVars = {
+    id: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    username: req.cookies["username"]
+  };
   res.render(`urls_show`,templateVars);
 });
 
@@ -84,6 +94,20 @@ app.post("/urls/:id", (req, res) => {
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect('/urls');
 });
+
+//login route (after pressing sign-in button).
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username); //set a cookie named username
+  console.log('username:', req.body.username);
+  res.redirect("/urls");
+});
+
+//logout route
+app.post("/logout", (req, res) => {
+  res.clearCookie('username');
+  res.redirect("/urls");
+});
+
 
 //route handler to home.
 app.get("/", (req, res) => {
